@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Wszystkie zadania</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+body { font-family: Arial; margin: 20px; }
+section { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; }
+input { display: block; margin: 5px 0; padding: 5px; }
+button { margin-top: 5px; padding: 5px; }
+.error { color: red; font-size: 12px; height: 14px; }
+.result { color: green; font-weight: bold; }
+button:disabled { background: #ccc; }
+</style>
+</head>
+
+<body>
+
+<h2>1. Formularz rejestracji</h2>
+<section>
+<input type="text" id="name" placeholder="Imię">
+<div class="error" id="nameError"></div>
+
+<input type="text" id="email" placeholder="Email">
+<div class="error" id="emailError"></div>
+
+<input type="password" id="password" placeholder="Hasło">
+<div class="error" id="passwordError"></div>
+
+<input type="password" id="confirmPassword" placeholder="Powtórz hasło">
+<div class="error" id="confirmError"></div>
+
+<button id="registerBtn" disabled>Zarejestruj</button>
+</section>
+
+<h2>Pozostałe zadania</h2>
+
+<section>
+<h3>2. Suma i średnia</h3>
+<input type="number" id="a1">
+<input type="number" id="a2">
+<input type="number" id="a3">
+<button id="calc1">Oblicz</button>
+<div class="result" id="res1"></div>
+</section>
+
+<section>
+<h3>3. Działania na 2 liczbach</h3>
+<input type="number" id="b1">
+<input type="number" id="b2">
+<button id="calc2">Oblicz</button>
+<div class="result" id="res2"></div>
+</section>
+
+<section>
+<h3>4. Pierwiastek</h3>
+<input type="number" id="c1">
+<button id="calc3">Oblicz</button>
+<div class="result" id="res3"></div>
+</section>
+
+<section>
+<h3>5. Pole kwadratu</h3>
+<input type="number" id="d1">
+<button id="calc4">Oblicz</button>
+<div class="result" id="res4"></div>
+</section>
+
+<section>
+<h3>6. Prostopadłościan</h3>
+<input type="number" id="e1" placeholder="a">
+<input type="number" id="e2" placeholder="b">
+<input type="number" id="e3" placeholder="c">
+<button id="calc5">Oblicz</button>
+<div class="result" id="res5"></div>
+</section>
+
+<section>
+<h3>7. Koło</h3>
+<input type="number" id="f1" placeholder="promień">
+<button id="calc6">Oblicz</button>
+<div class="result" id="res6"></div>
+</section>
+
+<section>
+<h3>8. Koszt trasy (360 km)</h3>
+<input type="number" id="g1" placeholder="cena paliwa">
+<button id="calc7">Oblicz</button>
+<div class="result" id="res7"></div>
+</section>
+
+<section>
+<h3>9. Koszt trasy (dowolny)</h3>
+<input type="number" id="h1" placeholder="cena">
+<input type="number" id="h2" placeholder="km">
+<input type="number" id="h3" placeholder="spalanie">
+<button id="calc8">Oblicz</button>
+<div class="result" id="res8"></div>
+</section>
+
+<section>
+<h3>10. Lokata 8%</h3>
+<input type="number" id="i1" placeholder="kwota">
+<button id="calc9">Oblicz</button>
+<div class="result" id="res9"></div>
+</section>
+
+<script>
+$(function(){
+
+// WALIDACJA
+function validateName(){
+    let v = $("#name").val();
+    if(v===""){ $("#nameError").text("Wpisz imię"); return false;}
+    $("#nameError").text(""); return true;
+}
+
+function validateEmail(){
+    let v=$("#email").val();
+    let r=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(v===""){ $("#emailError").text("Wpisz email"); return false;}
+    if(!r.test(v)){ $("#emailError").text("Zły email"); return false;}
+    $("#emailError").text(""); return true;
+}
+
+function validatePass(){
+    let v=$("#password").val();
+    if(v===""){ $("#passwordError").text("Wpisz hasło"); return false;}
+    if(v.length<6){ $("#passwordError").text("Min 6 znaków"); return false;}
+    $("#passwordError").text(""); return true;
+}
+
+function validateConfirm(){
+    let p=$("#password").val();
+    let c=$("#confirmPassword").val();
+    if(c===""){ $("#confirmError").text("Powtórz hasło"); return false;}
+    if(p!==c){ $("#confirmError").text("Hasła różne"); return false;}
+    $("#confirmError").text(""); return true;
+}
+
+function checkAll(){
+    let ok = validateName() && validateEmail() && validatePass() && validateConfirm();
+    $("#registerBtn").prop("disabled", !ok);
+}
+
+// live
+$("#name, #email, #password, #confirmPassword").keyup(function(){
+    validateName();
+    validateEmail();
+    validatePass();
+    validateConfirm();
+    checkAll();
+});
+
+// OBLICZENIA
+
+$("#calc1").click(function(){
+    let a=+$("#a1").val(),b=+$("#a2").val(),c=+$("#a3").val();
+    let s=a+b+c;
+    $("#res1").html("Suma: "+s+"<br>Średnia: "+(s/3));
+});
+
+$("#calc2").click(function(){
+    let a=+$("#b1").val(),b=+$("#b2").val();
+    $("#res2").html("Suma: "+(a+b)+"<br>Różnica: "+(a-b)+"<br>Iloczyn: "+(a*b));
+});
+
+$("#calc3").click(function(){
+    $("#res3").text(Math.sqrt(+$("#c1").val()));
+});
+
+$("#calc4").click(function(){
+    let a=+$("#d1").val();
+    $("#res4").text(a*a);
+});
+
+$("#calc5").click(function(){
+    let a=+$("#e1").val(),b=+$("#e2").val(),c=+$("#e3").val();
+    $("#res5").text(2*(a*b+a*c+b*c));
+});
+
+$("#calc6").click(function(){
+    let r=+$("#f1").val();
+    $("#res6").html("Pole: "+(Math.PI*r*r).toFixed(2)+"<br>Obwód: "+(2*Math.PI*r).toFixed(2));
+});
+
+$("#calc7").click(function(){
+    let cena=+$("#g1").val();
+    $("#res7").text(((360/100)*8*cena).toFixed(2)+" zł");
+});
+
+$("#calc8").click(function(){
+    let cena=+$("#h1").val(),km=+$("#h2").val(),sp=+$("#h3").val();
+    $("#res8").text(((km/100)*sp*cena).toFixed(2)+" zł");
+});
+
+$("#calc9").click(function(){
+    let k=+$("#i1").val();
+    let z=k*0.08;
+    let netto=z-(z*0.19);
+    $("#res9").text(netto.toFixed(2)+" zł");
+});
+
+});
+</script>
+
+</body>
+</html>
